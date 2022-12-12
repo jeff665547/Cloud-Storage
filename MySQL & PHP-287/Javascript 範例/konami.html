@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+var arr = [];
+var konami_pattern = [38,38,40,40,37,39,37,39,66,65];
+document.addEventListener('keydown', function(e){
+	arr.push(e.keyCode);
+	if(arr.length > 10) arr.shift();
+	console.log(arr);
+	if(arr.length == 10){
+		var match = true;
+		for(var i=0; i<10; i++){
+			if(arr[i] != konami_pattern[i]){
+				match = false;
+				break;
+			}
+		}
+		if(match){
+			var colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'grey', 'skin', 'skyblue', 'pink'];
+			var color_idx = Math.floor(Math.random() * colors.length);
+			document.body.style.backgroundColor = colors[color_idx];
+		}
+	}
+});
+</script>
+</body>
+</html>

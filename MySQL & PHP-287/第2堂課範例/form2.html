@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+</head>
+<body>
+
+	<form method="POST" action="action.php">
+		名字: <input type="text" name="user_name" required><br>
+		性別:
+		<input type="radio" name="user_gender" value="female">女
+		<input type="radio" name="user_gender" value="male">男
+		<input type="radio" name="user_gender" value="unknown" checked>不明
+		<br>
+		語言:
+		<input type="checkbox" name="user_lang[]" value="mandarin" checked>中文
+		<input type="checkbox" name="user_lang[]" value="english" checked>英文
+		<input type="checkbox" name="user_lang[]" value="japanese">日文
+		<input type="checkbox" name="user_lang[]" value="korean">韓文
+		<br>
+		教育程度:
+		<select name="user_edu">
+			<option value="elem">國小</option>
+			<option value="jh" selected>國中</option>
+			<option vale="sh">高中職</option>
+			<option value="col">大學</option>
+		</select>
+		<br>
+		程式語言:
+		<select name="user_promlang[]" multiple>
+			<option value="c++">C++</option>
+			<option value="python">Python</option>
+			<option value="javascript">Javascript</option>
+		</select>
+		<br>
+		自傳:<br>
+		<textarea name="user_bio"></textarea><br>
+		秘密: <input type="password" name="user_secret"><br>
+		<input type="hidden" name="user_hidden" value="hide_and_seek">
+
+		<input type="submit" value="送出!">
+		<input type="reset" value="重設!">
+	</form>
+
+</body>
+</html>

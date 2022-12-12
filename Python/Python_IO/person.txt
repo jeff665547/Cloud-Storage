@@ -1,0 +1,1 @@
+{"name": "Bob", "age": 12, "int": 11, "float": 2.2, "True": true, "False": false, "None": null, "dict": {"A": 33, "B": "pig"}, "list": [1, 2, 3], "tuple": [1, 1, 0], "children": null}

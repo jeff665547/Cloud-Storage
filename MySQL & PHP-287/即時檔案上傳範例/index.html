@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	html{
+		height: 100%;
+	}
+	#box{
+		width: 400px;
+		height: 400px;
+		border: solid 1px lightgrey;
+	}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<div id="upload-files"></div>
+	<script type="text/javascript">
+		var box = document.getElementById('box'),
+			upload_files = document.getElementById('upload-files');
+		box.addEventListener("dragover",function(event){
+			event.preventDefault();
+		});
+		box.addEventListener("drop", function (e) {
+			e.preventDefault();
+			
+			this.style.background = "none";
+			this.innerHTML = "";
+
+			upload_files.innerHTML = '';
+
+			var fd = new FormData();
+			var files = e.dataTransfer.files;
+			for(var i=0; files[i]; i++){
+				console.log(files[i].name);
+				upload_files.innerHTML += files[i].name;
+				upload_files.innerHTML += "<br>";
+
+				fd.append('files[]', files[i]);
+			}
+
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4 && xhr.status == 200){
+					upload_files.innerHTML += xhr.responseText + "<br>";
+				}
+			};
+			xhr.open("POST", "/file_upload/upload.php", true);
+			xhr.send(fd);
+		});
+		box.addEventListener("dragenter", function(){
+			this.style.backgroundColor = "pink";
+			this.innerHTML = "Drop here.";
+		});
+		box.addEventListener("dragleave", function(){
+			this.style.background = "none";
+			this.innerHTML = "";
+		});
+	</script>
+</body>
+</html>

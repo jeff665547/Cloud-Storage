@@ -1,0 +1,11 @@
+{
+	"type": "Banff",
+	"languages": ["Engilsh", "French"],
+	"Info":{
+		"type": "Banff",
+		"pars": {
+			"height": 38,
+			"weight": 66
+		}
+	}
+}

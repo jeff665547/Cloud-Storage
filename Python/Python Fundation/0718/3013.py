@@ -1,0 +1,4 @@
+sentence = input()
+
+n = input()
+

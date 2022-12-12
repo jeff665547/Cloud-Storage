@@ -1,0 +1,216 @@
+1. CMake，是crossplatform make的縮寫，它是一個跨平臺的安裝(編譯)工具，
+可以用簡單的語句來描述所有平台的安裝(編譯過程)。它能夠輸出各式各樣的
+makefile或者project檔，能測試編譯器所支援的C++特性，類似UNIX下的automake。
+只是CMake的組態檔取名為CmakeLists.txt。Cmake並不直接建立出最終的軟體，而是
+產生標準的建立檔(如Unix的Makefile或 Windows Visual C++的project/workspaces)，
+然後再依一般的建立方式使用。這使得熟悉某個整合式開發環境(IDE)的開發者可以用標準的
+方式建立它的軟體，這種可以使用各平台的原生建立系統的能力是CMake和SCons等其他類似系統
+的區別之處。
+
+2. opencv.hpp 標頭檔認知
+# include <opencv2/opencv.hpp> 一句中的標頭檔定義類似如下:
+==============================================================================
+# include <opencv2/opencv.hpp>
+# ifndef __OPENCV_ALL_HPP__
+# define __OPENCV_ALL_HPP__
+
+# include "opencv2/core/core_c.h"
+# include "opencv2/core/core.hpp"
+# include "opencv2/flann/miniflann.hpp"
+# include "opencv2/imgproc/imgproc_c.h"
+# include "opencv2/imgproc/imgproc.hpp"
+# include "opencv2/photo/photo.hpp"
+# include "opencv2/video/video.hpp"
+# include "opencv2/features2d/features2d.hpp"
+# include "opencv2/objdetect/objdetect.hpp"
+# include "opencv2/calib3d/calib3d.hpp"
+# include "opencv2/ml/ml.hpp"
+# include "opencv2/highgui/highgui_c.h"
+# include "opencv2/highgui/highgui.hpp"
+# include "opencv2/contrib/contrib.hpp"
+
+# endif
+==============================================================================
+opencv.hpp中已經包含了OpenCV各模組的標頭檔，
+如高層GUI圖形化使用者介面模組標頭檔"highgui.hpp"、
+影像處理模組標頭檔"imgproc.hpp"、
+2D特徵模組標頭檔"feature2d.hpp"等。
+因此，在編寫core、imgproc、photo、video、features2d、objdetect、calib3d、ml、highgui、
+contrib模組的應用程式時，原則上僅寫一句 # include <opencv2/opencv.hpp> 即可，
+這樣可以精簡優化程式碼。
+
+3. variable name 命名規則
+一套成熟的命名規則，不僅可以讓我們規範行事，還可以讓別人在閱讀我們書寫的程式碼時，可以更好、更快
+地理解我們的思路，從而增強了程式碼的可讀性，方便大家交流程式碼。注意: 一但確定了一套合適且成熟命名規範後，最好不要中途修改。
+
+|               描述                |         實例         |
+|---------------------------------: | :-----------------: |
+|類別名混合使用大小寫，首字母大小寫        |ClassName|
+|----------------------------------------------------------|
+|類型定義，包括舉例和typedef，混合
+|使用大小寫，首字母大小寫                 |TypeName|
+|----------------------------------------------------------|
+|舉例類型除了混合使用大小寫外，總以
+|複數形式表示                            |EnumeratedType|
+|----------------------------------------------------------|
+|區域變數混合使用大小寫，且首字母小
+|寫，其名字應該與底層資料類型無關，
+|而且應該反映該變數所代表的事物            |localVariable|
+|----------------------------------------------------------|
+|副程式引數的格式混合使用大小寫，且
+|每個單詞首字母大寫，其名字應該與底
+|層資料類型無關，而且應該反映該變數
+|所代表的事物。                           |RoutineParameter|
+|----------------------------------------------------------|
+|對類別的多個子程式可見(且只對該類可  
+|見)的成員變數用m_首碼。                  |m_ClassVariable|
+|----------------------------------------------------------|
+|全域變數名用g_首碼                       |g_GlobalVariable|
+|----------------------------------------------------------|
+|具名常數全部大寫                         |CONSTANT|
+|----------------------------------------------------------|
+|巨集全部大寫，單詞間用分隔符號'_'隔開     |SCREEN_WIDTH|
+|----------------------------------------------------------|
+|舉例類型成員名用能反映基礎類型的、單  
+|數形式的首碼。如: Color_Red、Color_Blue  |Base_EnumeratedType|
+
+匈牙利變數命名法 (屬性 + 類型 + 物件描述(名稱))
+
+首碼寫法      類型       描述                   實例
+ch           char       8位元字元              chGrade
+ch           TCHAR      16位元字元             chName
+b            BOOL       布林值                 bEnable
+n            int        整數值                 nLength
+n            UINT       無符號值               nHeight
+w            WORD       16位元無符號值          wPos
+l            LONG       32位元有符號整型        lOffset
+dw           DWORD      32位元無符號整型        dwRange
+p            *          指標                   pDoc
+lp           FAR*       遠指標                 lpszName
+lpsz         LPSTR      32位元字串指標          lpszName
+lpsz         LPCSTR     32位元常數字串指標       lpszName
+lpsz         LPCTSTR    32位元字串指標          lpszName
+h            handle     Windows 對象控制碼      hWnd
+lpfn         callback   指向CALLBACK函數的遠指標 LpfnName
+
+
+關鍵字字母組合
+
+描述內容           使用的關鍵字字母組合
+最大值             Max
+最小值             Min
+初始化             Init
+臨時變數           T (或Temp)
+來源對象           Src 
+目的物件           Dst
+
+4. argc與argv引數介紹
+argc和argv中的arg指的是"引數"(例如:arguments、argument counter、argument vector)。
+其中，argc為整數，用來統計執行程式時送給main函數的命令列引數的個數；而*argv[]:為字串陣列，
+用來存放指向字串引數的指標陣列，每一個元素指向一個引數。
+argc以及argv這兩個引數一般用在命令列編譯器時有用。在初學C++時，往往要弱化argc和argv的用法，
+main函數常常不帶引數，如下:
+
+int main(){
+
+
+}
+
+而在OpenCV的官方範例程式中，main函數的寫法時常會帶上兩個參數，一般為argc以及argv，並且在函數
+體內部會使用到這兩個函數，如下:
+
+int main(int argc, char** argv){
+    
+    const char* imagename = argc > 1 ? argv[1] : "lena.jpg";
+
+}
+
+這種帶參數的main函數，如main(int argc, char *argv[], char **env)，
+其實是UNIX、Linux以及Mac OS作業系統中C/C++的main函數的標準寫法，
+並且是血統最純正的main函數的寫法。
+
+argc 和 argv 這兩個引數一般用在命令列編譯器時有用。
+主函數main中變數(int argc, char *argv[])的含義，有些編譯器允許將main()的返回型別
+宣告為void，這就已不再是合法的C++了。
+
+在main(int argc, char *argv[], char **env)中，第一個引數，int類型的argc，為整型，
+用來統計程式執行時，發送給main函數的命令列引數的個數，在Visual Studio中預設值為1。
+第二個引數，char*類型的argv[]，為字串陣列，用來存放指向的字串引數的指標陣列，
+每一個元素指向一個引數
+
+argv[0] 指向程式執行的全路徑名
+argv[1] 指向在DOS命令列中執行程式名後的第一個字串。
+argv[2] 指向執行程式名後的第二個字串。
+argv[argc] 為NULL。
+
+第三個引數，char**類型的env，為字串陣列。env[]的每個元素都包含ENVVAR=value形式的字串。
+其中ENVVAR為環境變數，value為ENVVAR的對應值。在OpenCV中很少使用它。
+
+一般來說main函數有以下2種常見的寫法:
+A. 返回值為整數且帶參數的main函數
+int main(int argc, char** argv){
+    // 函數體內使用或不使用argc和argv都可行。
+    ...
+    return 0;
+}
+
+B. 返回值為整數且不帶參數的main函數
+int main(){
+    // 函數體內不使用argc和argv。
+    ...
+    return 0;
+}
+
+C. 返回值為void且不帶參數的main函數
+void main(){
+    ...
+}
+
+5. printf()函數
+printf中的f為"格式"(format)之意。其功能是按用戶指定的格式，把指定的資料顯示到視窗中。
+printf"格式字串"候選字元
+
+格式字串       作用
+%d            將整數轉換成十進位
+%f            將整數轉換成浮點數
+%u            十進位不帶正負號的整數
+%o            將整數轉成八進制
+%c            將整數轉成對應的ASCII字元
+%s            將整數轉成字串
+%x            整數轉成小寫十六進位
+%X            整數轉成大寫十六進位
+%p            輸出位址符號
+%%            輸出百分比符號，不進行轉換
+
+規定字元       作用
+\n            換行操作
+\f            清除螢幕並換頁
+\r            Enter
+\t            Tab符號
+\xhh          用16進位表示的ASCII碼，其中每個h可以用0~f中的一個代替。
+
+e.g.
+# include <opencv2/opencv.hpp>
+using namespace cv;
+
+void main(){
+    int a = 66, b = 68;
+    printf("\n\t%d %d\n", a, b); // 輸出十進位整數型
+    printf("\n\t%06d, %06d\n", a, b); // 輸出6位十進位整數型
+    printf("\n\t%c, %c\n", a, b);  // 按ASCII字元輸出
+    printf("\n\t結果為:a=%d, b=%d", a, b);   // 可以配合其他內容一同輸出
+    getchar();   // 等待讀入任意字元而結束，在此用於保持視窗顯示，直到任意鍵按下
+}
+
+6. 顯示當前使用的OpenCV版本 (CV_VERSION)
+# include <iostream>
+# include "opencv2\core\version.hpp"
+
+int main(){
+
+    if(1){
+        std::cout << CV_VERSION << std::endl;
+    }
+
+    return 0;
+}
